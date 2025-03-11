@@ -48,6 +48,7 @@
     let callLetter = "";
     let callString = " ";
     let count = 0
+
     function newCall() {
         count++;
         let letter = Math.floor(Math.random() * 5) + 1;
@@ -67,17 +68,18 @@
 
         document.getElementById('call').innerHTML = callString;
         document.getElementById('count').innerHTML = "Called Numbers: " + calledNumbers.join(", ");
+        markComputer(callNumber);
     }
 
 
-    function markComputer(theId) {
-        let cell = document.getElementById(theId);
-        let number = parseInt(cell.innerText.trim(), 10); // Convert text to an integer
+    function markComputer(callNumber) {
+        let cell = document.getElementById(callNumber);
+        let number = parseInt(cell.innerHTML.trim(), 10); // Convert text to an integer
 
         if (calledNumbers.includes(number)) {
             //needed classList instade of classname
             cell.classList.add("lightblue");
-            checkForWin();
+            checkForComputerWin();
         } else {
             console.log("Number NOT found in calledNumbers.");
         }
@@ -86,7 +88,6 @@
     function changeToRed(theId) {
         let cell = document.getElementById(theId);
         let number = parseInt(cell.innerText.trim(), 10); // Convert text to an integer
-
         if (calledNumbers.includes(number)) {
             //needed classList instade of classname
             cell.classList.add("red");
@@ -102,7 +103,7 @@
         let winPatterns = [
             ["1", "6", "11", "16", "21"],  // B
             ["2", "7", "12", "17", "22"],  // I
-            ["3", "8", "13", "18", "23"],  // N
+            ["3", "8", "FREE", "18", "23"],  // N
             ["4", "9", "14", "19", "24"],  // G
             ["5", "10", "15", "20", "25"], // O
         ];
@@ -110,6 +111,22 @@
         winPatterns.forEach(pattern => {
             if (pattern.every(id => document.getElementById(id).classList.contains("red"))) {
                 document.getElementById("fourSquares").innerHTML = "BINGO!";
+            }
+        });
+    }
+    //win patterns work
+    function checkForComputerWin() {
+        let winPatterns = [
+            ["26", "31", "36", "41", "46"],  // B
+            ["27", "32", "37", "42", "47"],  // I
+            ["28", "33", "FREE", "43", "48"],  // N
+            ["29", "34", "39", "44", "49"],  // G
+            ["30", "35", "40", "45", "50"], // O
+        ];
+
+        winPatterns.forEach(pattern => {
+            if (pattern.every(id => document.getElementById(id).classList.contains("blue"))) {
+                document.getElementById("computerwin").innerHTML = "COMPUTER BINGO!";
             }
         });
     }
@@ -225,7 +242,7 @@ if ($ICThree == $ICTwo || $ICThree == $ICOne){
 if ($ICFour == $ICThree || $ICFour == $ICOne || $ICFour == $ICTwo){
     $ICFour = rand(16, 30);
 }
-if ($ICFive == $ICFour || $ICFive == $ICOne || $ICFour == $ICTwo || $ICFive == $ICThree){
+if ($ICFive == $ICFour || $ICFive == $ICOne || $ICFive == $ICTwo || $ICFive == $ICThree){
     $ICFive = rand(16, 30);
 }
 $NCOne = rand(31, 45); $NCTwo = rand(31, 45); $NCThree = "FREE"; $NCFour = rand(31, 45); $NCFive = rand(31, 45);
@@ -251,6 +268,9 @@ if ($GCThree == $GCTwo || $GCThree == $GCOne){
 if ($GCFour == $GCTwo || $GCFour == $GCOne || $GCFour == $GCThree){
     $GCFour = rand(46, 60);
 }
+if ($GCFive == $GCOne || $GCFive == $GCTwo || $GCFive == $GCThree || $GCFive == $GCFour){
+    $GCFive = rand(46, 60);
+}
 $OCOne = rand(61, 75); $OCTwo = rand(61, 75); $OCThree = rand(61, 75); $OCFour = rand(61, 75); $OCFive = rand(61, 75);
 if ($OCTwo == $OCOne){
     $OCTwo = rand(61, 75);
@@ -273,7 +293,6 @@ if ($conn->query($rowOne) === TRUE) {
 } else {
     echo "Error: " . $rowOne . "<br>" . $conn->error;
 }
-//fix starting here
         $rowTwo = "UPDATE $table SET B='$BTwo', I='$ITwo', N='$NTwo', G='$GTwo', O='$OTwo'WHERE rowId=2";
 if ($conn->query($rowTwo) === TRUE) {
 } else {
@@ -414,7 +433,7 @@ echo        '</td>';
 echo        '<td id="12" onclick="changeToRed(12)">';
 echo            '<div class="number">'.$IThree.'</div>';
 echo        '</td>';
-echo        '<td id="13" onclick="changeToRed(13)">';
+echo        '<td id="FREE" onclick="changeToRed(13)">';
 echo            '<div class="number">FREE</div>';
 echo        '</td>';
 echo        '<td id="14" onclick="changeToRed(14)">';
@@ -460,7 +479,6 @@ echo        '<td id="25" onclick="changeToRed(25)">';
 echo            '<div class="number">'.$OFive.'</div>';
 echo        '</td>';
 echo '</tr></p>';
-echo        '<br /><br/>';
 echo        '<p id="fourSquares"></p>';
 echo '</div>';
 
@@ -486,96 +504,96 @@ echo        '</td>';
 echo    '</tr>';
 
 echo    '<tr>';
-echo     '  <td id="26" onclick="markComputer(26)">';
+echo     '  <td id="26" ">';
 echo      '      <div class="number">'.$BCOne.'</div>';
 echo       ' </td>';
-echo        '<td id="27" onclick="markComputer(27)">';
+echo        '<td id="27" >';
 echo         '   <div class="number">'.$ICOne.'</div>';
 echo        '</td>';
-echo        '<td id="28" onclick="markComputer(28)">';
+echo        '<td id="28" >';
 echo         '   <div class="number">'.$NCOne.'</div>';
 echo        '</td>';
-echo        '<td id="29" onclick="markComputer(29)">';
+echo        '<td id="29" >';
 echo         '   <div class="number">'.$GCOne.'</div>';
 echo        '</td>';
-echo        '<td id="30" onclick="markComputer(30)">';
+echo        '<td id="30" >';
 echo         '   <div class="number">'.$OCOne.'</div>';
 echo        '</td>';
 echo    '</tr>';
 
 echo    '<tr>';
-echo     '   <td id="31" onclick="markComputer(31)">';
+echo     '   <td id="31" >';
 echo      '      <div class="number">'.$BCTwo.'</div>';
 echo       ' </td>';
-echo        '<td id="32" onclick="markComputer(32)">';
+echo        '<td id="32" >';
 echo         '   <div class="number">'.$ICTwo.'</div>';
 echo        '</td>';
-echo        '<td id="33" onclick="markComputer(33)">';
+echo        '<td id="33" >';
 echo         '   <div class="number">'.$NCTwo.'</div>';
 echo        '</td>';
-echo       ' <td id="34" onclick="markComputer(34)">';
+echo       ' <td id="34" >';
 echo        '    <div class="number">'.$GCTwo.'</div>';
 echo        '</td>';
-echo        '<td id="35" onclick="markComputer(35)">';
+echo        '<td id="35" >';
 echo         '   <div class="number">'.$OCTwo.'</div>';
 echo        '</td>';
 echo    '</tr>';
 
 echo   '<tr>';
-echo        '<td id="36" onclick="markComputer(36)">';
+echo        '<td id="36" >';
 echo            '<div class="number">'.$BCThree.'</div>';
 echo        '</td>';
-echo        '<td id="37" onclick="markComputer(37)">';
+echo        '<td id="37" >';
 echo            '<div class="number">'.$ICThree.'</div>';
 echo        '</td>';
-echo        '<td id="38" onclick="markComputer(38)">';
+echo        '<td id="FREE" >';
 echo            '<div class="number">FREE</div>';
 echo        '</td>';
-echo        '<td id="39" onclick="markComputer(39)">';
+echo        '<td id="39" >';
 echo            '<div class="number">'.$GCThree.'</div>';
 echo        '</td>';
-echo        '<td id="40" onclick="markComputer(40)">';
+echo        '<td id="40" >';
 echo           '<div class="number">'.$OCThree.'</div>';
 echo        '</td>';
 echo    '</tr>';
 
 echo    '<tr>';
-echo        '<td id="41" onclick="markComputer(41)">';
+echo        '<td id="41" >';
 echo            '<div class="number">'.$BCFour.'</div>';
 echo        '</td>';
-echo        '<td id="42" onclick="markComputer(42)">';
+echo        '<td id="42" >';
 echo            '<div class="number">'.$ICFour.'</div>';
 echo        '</td>';
-echo        '<td id="43" onclick="markComputer(43)">';
+echo        '<td id="43" >';
 echo            '<div class="number">'.$NCFour.'</div>';
 echo        '</td>';
-echo        '<td id="44" onclick="markComputer(44)">';
+echo        '<td id="44" >';
 echo            '<div class="number">'.$GCFour.'</div>';
 echo        '</td>';
-echo        '<td id="45" onclick="markComputer(45)">';
+echo        '<td id="45" >';
 echo            '<div class="number">'.$OCFour.'</div>';
 echo        '</td>';
 echo    '</tr>';
 
 echo    '<tr>';
-echo        '<td id="46" onclick="markComputer(46)">';
+echo        '<td id="46" >';
 echo           '<div class="number">'.$BCFive.'</div>';
 echo        '</td>';
-echo        '<td id="47" onclick="markComputer(47)">';
+echo        '<td id="47" >';
 echo            '<div class="number">'.$ICFive.'</div>';
 echo        '</td>';
-echo        '<td id="48" onclick="markComputer(48)">';
+echo        '<td id="48">';
 echo            '<div class="number">'.$NCFive.'</div>';
 echo        '</td>';
-echo        '<td id="49" onclick="markComputer(49)">';
+echo        '<td id="49">';
 echo            '<div class="number">'.$GCFive.'</div>';
 echo        '</td>';
-echo        '<td id="50" onclick="markComputer(50)">';
+echo        '<td id="50">';
 echo            '<div class="number">'.$OCFive.'</div>';
 echo        '</td>';
 echo '</tr></p>';
 echo        '<br />';
-echo        '<p id="fourSquares"></p>';
+echo        '<p id="computerwin"></p>';
 echo '</div>';
 ?>
 
