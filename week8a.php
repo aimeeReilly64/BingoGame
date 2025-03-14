@@ -65,24 +65,9 @@
 //get rid of it
         calledNumbers.push(callNumber);
         callString = `${callLetter} ${callNumber}`;
-
         document.getElementById('call').innerHTML = callString;
-        document.getElementById('count').innerHTML = "Called Numbers: " + calledNumbers.join(", ");
-        markComputer(callNumber);
-    }
-
-
-    function markComputer(callNumber) {
-        let cell = document.getElementById(callNumber);
-        let number = parseInt(cell.innerHTML.trim(), 10); // Convert text to an integer
-
-        if (calledNumbers.includes(number)) {
-            //needed classList instade of classname
-            cell.classList.add("lightblue");
-            checkForComputerWin();
-        } else {
-            console.log("Number NOT found in calledNumbers.");
-        }
+        document.getElementById('calledNums').innerHTML = "Called Numbers: " + calledNumbers.join(", ");
+        document.getElementById('currentCount').innerHTML = calledNumbers.length.toString(10);
     }
 
     function changeToRed(theId) {
@@ -97,7 +82,6 @@
         }
     }
 
-
     //win patterns work
     function checkForWin() {
         let winPatterns = [
@@ -111,22 +95,8 @@
         winPatterns.forEach(pattern => {
             if (pattern.every(id => document.getElementById(id).classList.contains("red"))) {
                 document.getElementById("fourSquares").innerHTML = "BINGO!";
-            }
-        });
-    }
-    //win patterns work
-    function checkForComputerWin() {
-        let winPatterns = [
-            ["26", "31", "36", "41", "46"],  // B
-            ["27", "32", "37", "42", "47"],  // I
-            ["28", "33", "FREE", "43", "48"],  // N
-            ["29", "34", "39", "44", "49"],  // G
-            ["30", "35", "40", "45", "50"], // O
-        ];
-
-        winPatterns.forEach(pattern => {
-            if (pattern.every(id => document.getElementById(id).classList.contains("blue"))) {
-                document.getElementById("computerwin").innerHTML = "COMPUTER BINGO!";
+                document.getElementById("winInput").value = "true";  //hidden
+                document.getElementById("bingoForm").submit();  // form
             }
         });
     }
@@ -136,19 +106,6 @@
 <body style="font-size : 13px" >
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "phpaimee_root";
-$table = "bingo";
-$conn = new mysqli($servername, $username, $password, $dbname);
-//not used
-$count = 0; // count
-$letter = rand(1,5);
-
-echo '<p id="call"></p>';
-//not used
-echo  '<p id="count"></p>';
 //generate the bingo card
 //B: 1-15
 //I: 16-30
@@ -284,91 +241,19 @@ if ($OCFour == $OCThree || $OCFour == $OCOne || $OCFour == $OCTwo){
 if ($OCFive == $OCThree || $OCFive == $OCOne || $OCFive == $OCTwo || $OCFive == $OCFour){
     $OCFive = rand(61, 75);
 }
-//
+//sql
 $x = 0;
-
-//update the rows
-$rowOne = "UPDATE $table SET B='$BOne', I='$IOne', N='$NOne', G='$GOne', O='$OOne'WHERE rowId=1";
-if ($conn->query($rowOne) === TRUE) {
-} else {
-    echo "Error: " . $rowOne . "<br>" . $conn->error;
-}
-        $rowTwo = "UPDATE $table SET B='$BTwo', I='$ITwo', N='$NTwo', G='$GTwo', O='$OTwo'WHERE rowId=2";
-if ($conn->query($rowTwo) === TRUE) {
-} else {
-    echo "Error: " . $rowTwo . "<br>" . $conn->error;
-}
-
-
-$rowThree = "UPDATE $table SET B='$BThree', I='$IThree', N='$NThree', G='$GThree', O='$OThree'WHERE rowId=3";
-if ($conn->query($rowThree) === TRUE) {
-} else {
-    echo "Error: " . $rowThree . "<br>" . $conn->error;
-}
-
-$rowFour = "UPDATE $table SET B='$BFour', I='$IFour', N='$NFour', G='$GFour', O='$OFour'WHERE rowId=4";
-if ($conn->query($rowFour) === TRUE) {
-} else {
-    echo "Error: " . $rowFour . "<br>" . $conn->error;
-}
-
-$rowFive = "UPDATE $table SET B='$BFive', I='$IFive', N='$NFive', G='$GFive', O='$OFive'WHERE rowId=5";
-if ($conn->query($rowFive) === TRUE) {
-} else {
-    echo "Error: " . $rowFive . "<br>" . $conn->error;
-}
-//computer
-//update the rows
-$rowSix = "UPDATE $table SET B='$BCOne', I='$ICOne', N='$NCOne', G='$GCOne', O='$OCOne'WHERE rowId=6";
-if ($conn->query($rowSix) === TRUE) {
-} else {
-    echo "Error: " . $rowSix . "<br>" . $conn->error;
-}
-//fix starting here
-$rowSeven = "UPDATE $table SET B='$BCTwo', I='$ICTwo', N='$NCTwo', G='$GCTwo', O='$OCTwo'WHERE rowId=7";
-if ($conn->query($rowSeven) === TRUE) {
-} else {
-    echo "Error: " . $rowSeven . "<br>" . $conn->error;
-}
-
-
-$rowEight = "UPDATE $table SET B='$BCThree', I='$ICThree', N='$NCThree', G='$GCThree', O='$OCThree'WHERE rowId=8";
-if ($conn->query($rowEight) === TRUE) {
-} else {
-    echo "Error: " . $rowEight . "<br>" . $conn->error;
-}
-
-$rowNine = "UPDATE $table SET B='$BCFour', I='$ICFour', N='$NCFour', G='$GCFour', O='$OCFour'WHERE rowId=9";
-if ($conn->query($rowNine) === TRUE) {
-} else {
-    echo "Error: " . $rowNine . "<br>" . $conn->error;
-}
-
-$rowTen = "UPDATE $table SET B='$BCFive', I='$ICFive', N='$NCFive', G='$GCFive', O='$OCFive'WHERE rowId=10";
-if ($conn->query($rowTen) === TRUE) {
-} else {
-    echo "Error: " . $rowTen . "<br>" . $conn->error;
-}
-
-
-$sql2 = "SELECT * FROM $table";
-$result = $conn->query($sql2);
-if ($result->num_rows > 0) {
-    $rows = [];
-    while ($row = $result->fetch_assoc()) {
-        $rows[] = $row;
-    }
-    foreach ($rows as $index => $row) {
-        $B = $row["B"];
-        $I = $row["I"];
-        $N = $row["N"];
-        $G = $row["G"];
-        $O = $row["O"];
-    }
-} else {
-    echo "List is empty";
-}
-echo '<button id="submit" onclick="newCall()" >Get Number </button>';
+$bingo = " ";
+$currentCount = 0;
+$letter = rand(1,5);
+?>
+<form id="bingoForm" method="post" action="">
+    <input type="hidden" name="win" id="winInput" value="false">
+    <input type="hidden" name="currentCount" id="currentCount" value="<?php echo $currentCount; ?>">
+    <p id ='call'></p><br /><p id = 'calledNums'></p><br />
+</form>
+    <?php
+echo '<button id="submit" onclick="newCall()">Get Number </button>';
 echo '<div>';
 echo '<table id = player>';
 echo '<thead>Your Game</thead>';
@@ -479,122 +364,39 @@ echo        '<td id="25" onclick="changeToRed(25)">';
 echo            '<div class="number">'.$OFive.'</div>';
 echo        '</td>';
 echo '</tr></p>';
-echo        '<p id="fourSquares"></p>';
+echo        '<p id="fourSquares">'.$bingo.'</p>';
 echo '</div>';
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["win"]) && $_POST["win"] == "true") {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "phpaimee_root";
+    $table = "bingocount";
 
-//start of computer player card
-echo '<table id = computer>';
-echo '<thead>Computer Game</thead>';
-echo '<tr>';
-echo '<td>';
-echo            '<div class="letter">B</div>';
-echo        '</td>';
-echo        '<td>';
-echo            '<div class="letter">I</div>';
-echo        '</td>';
-echo        '<td>';
-echo            '<div class="letter">N</div>';
-echo        '</td>';
-echo        '<td>';
-echo            '<div class="letter">G</div>';
-echo        '</td>';
-echo        '<td>';
-echo            '<div class="letter">O</div>';
-echo        '</td>';
-echo    '</tr>';
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-echo    '<tr>';
-echo     '  <td id="26" ">';
-echo      '      <div class="number">'.$BCOne.'</div>';
-echo       ' </td>';
-echo        '<td id="27" >';
-echo         '   <div class="number">'.$ICOne.'</div>';
-echo        '</td>';
-echo        '<td id="28" >';
-echo         '   <div class="number">'.$NCOne.'</div>';
-echo        '</td>';
-echo        '<td id="29" >';
-echo         '   <div class="number">'.$GCOne.'</div>';
-echo        '</td>';
-echo        '<td id="30" >';
-echo         '   <div class="number">'.$OCOne.'</div>';
-echo        '</td>';
-echo    '</tr>';
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-echo    '<tr>';
-echo     '   <td id="31" >';
-echo      '      <div class="number">'.$BCTwo.'</div>';
-echo       ' </td>';
-echo        '<td id="32" >';
-echo         '   <div class="number">'.$ICTwo.'</div>';
-echo        '</td>';
-echo        '<td id="33" >';
-echo         '   <div class="number">'.$NCTwo.'</div>';
-echo        '</td>';
-echo       ' <td id="34" >';
-echo        '    <div class="number">'.$GCTwo.'</div>';
-echo        '</td>';
-echo        '<td id="35" >';
-echo         '   <div class="number">'.$OCTwo.'</div>';
-echo        '</td>';
-echo    '</tr>';
+    // Fetch the latest play ID
+    $result = $conn->query("SELECT MAX(playID) AS maxID FROM $table");
+    $row = $result->fetch_assoc();
+    $playID = ($row["maxID"] !== null) ? $row["maxID"] + 1 : 1;
+    $currentCount = isset($_POST['currentCount']) ? $_POST['currentCount'] : 0;
 
-echo   '<tr>';
-echo        '<td id="36" >';
-echo            '<div class="number">'.$BCThree.'</div>';
-echo        '</td>';
-echo        '<td id="37" >';
-echo            '<div class="number">'.$ICThree.'</div>';
-echo        '</td>';
-echo        '<td id="FREE" >';
-echo            '<div class="number">FREE</div>';
-echo        '</td>';
-echo        '<td id="39" >';
-echo            '<div class="number">'.$GCThree.'</div>';
-echo        '</td>';
-echo        '<td id="40" >';
-echo           '<div class="number">'.$OCThree.'</div>';
-echo        '</td>';
-echo    '</tr>';
+    $date = date("Y-m-d");
+    $insert = $conn->query("INSERT INTO $table (playID, count, date) VALUES ('$playID', '$currentCount', '$date')");
+    if ($insert === TRUE) {
+        echo "<p>New game session recorded! Play ID: $playID</p>";
+            echo "<p>Today's date is $date </p>";
+        echo "<p>It took you $currentCount numbers to get Bingo</p>";
+    } else {
+        echo "<p>Error inserting game data: " . $conn->error . "</p>";
+    }
 
-echo    '<tr>';
-echo        '<td id="41" >';
-echo            '<div class="number">'.$BCFour.'</div>';
-echo        '</td>';
-echo        '<td id="42" >';
-echo            '<div class="number">'.$ICFour.'</div>';
-echo        '</td>';
-echo        '<td id="43" >';
-echo            '<div class="number">'.$NCFour.'</div>';
-echo        '</td>';
-echo        '<td id="44" >';
-echo            '<div class="number">'.$GCFour.'</div>';
-echo        '</td>';
-echo        '<td id="45" >';
-echo            '<div class="number">'.$OCFour.'</div>';
-echo        '</td>';
-echo    '</tr>';
-
-echo    '<tr>';
-echo        '<td id="46" >';
-echo           '<div class="number">'.$BCFive.'</div>';
-echo        '</td>';
-echo        '<td id="47" >';
-echo            '<div class="number">'.$ICFive.'</div>';
-echo        '</td>';
-echo        '<td id="48">';
-echo            '<div class="number">'.$NCFive.'</div>';
-echo        '</td>';
-echo        '<td id="49">';
-echo            '<div class="number">'.$GCFive.'</div>';
-echo        '</td>';
-echo        '<td id="50">';
-echo            '<div class="number">'.$OCFive.'</div>';
-echo        '</td>';
-echo '</tr></p>';
-echo        '<br />';
-echo        '<p id="computerwin"></p>';
-echo '</div>';
+    $conn->close();
+}
 ?>
 
 </body>
